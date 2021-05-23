@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="lbl_signup_phone">Sign Up with Phone</string>
+    <string name="lbl_google">Google</string>
+    <string name="lbl_facebook">Facebook</string>
+    <string name="lbl_signup">Sign up</string>
+    <string name="lbl_a_ready_have_acount">A ready have account</string>
+    <string name="lbl_password">Password</string>
+    <string name="lbl_email">Email</string>
+    <string name="lbl_name">Name</string>
+    <string name="dialog_box">Hộp thoại</string>
+    <string name="lbl_loadding">load ding</string>
+    <string name="lbl_click_for_sign_up">Click for Sign Up</string>
+    <string name="lbl_email_or_phone">Email / Phone</string>
+    <string name="lbl_signin">sign in</string>
+    <string name="lbl_signup_success">User Created Successfully</string>
+    <string name="lbl_signin_success">SignIn successfuly</string>
+</resources>
