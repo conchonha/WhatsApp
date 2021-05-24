@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
         <activity
-            android:name=".ui.page.MainActivity"
+            android:name=".ui.page.home.HomeActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.page.signup.SignUpActivity"

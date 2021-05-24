@@ -15,4 +15,5 @@
     <string name="lbl_signin">sign in</string>
     <string name="lbl_signup_success">User Created Successfully</string>
     <string name="lbl_signin_success">SignIn successfuly</string>
+    <string name="lbl_sign_out">Signout successfully</string>
 </resources>

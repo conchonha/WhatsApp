@@ -32,20 +32,17 @@ public abstract class BaseFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initViewModel();
-        initView();
         init();
         onListenerClicked();
     }
 
-    protected abstract void initView();
+    protected abstract View getContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState);
 
     protected abstract void initViewModel();
 
     protected abstract void init();
 
     protected abstract void onListenerClicked();
-
-    protected abstract View getContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState);
 
     protected void showProgressLoadding() {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {

@@ -1,18 +1,22 @@
 package com.whatsapp.whatsappexample.ui.page.signup;
 
 
+import android.content.Intent;
 import android.view.View;
 
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.whatsapp.whatsappexample.R;
 import com.whatsapp.whatsappexample.app.MyApplication;
 import com.whatsapp.whatsappexample.base.BaseActivity;
 import com.whatsapp.whatsappexample.databinding.ActivitySignupBinding;
+import com.whatsapp.whatsappexample.ui.page.home.HomeActivity;
+import com.whatsapp.whatsappexample.utils.Contains;
 import com.whatsapp.whatsappexample.utils.Validations;
 
-public class SignUpActivity extends BaseActivity implements View.OnClickListener {
+public class SignUpActivity extends BaseActivity implements View.OnClickListener ,FirebaseAuth.AuthStateListener{
     private ActivitySignupBinding mBinding;
     private SignUpViewModel mSignUpViewModel;
 
@@ -33,7 +37,6 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
                     showProgressLoadding();
                 }else{
                     dismisProgressDialog();
-                    finish();
                 }
             }
         });
@@ -48,6 +51,7 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
     protected void onListenerClicked() {
         mBinding.btnSignUp.setOnClickListener(this);
         mBinding.mtxtAreadyAcount.setOnClickListener(this::onClick);
+        mBinding.btnGoogle.setOnClickListener(this::onClick);
     }
 
     @Override
@@ -69,6 +73,41 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
             case R.id.mtxtAreadyAcount:
                 finish();
                 break;
+            case R.id.btnGoogle:
+                // mở intent signin google
+                Intent signInIntent = mSignUpViewModel.getInstanceGoogleSignInClient().getSignInIntent();
+                startActivityForResult(signInIntent, Contains.RC_SIGN_IN);
+                break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode,Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == Contains.RC_SIGN_IN){
+            mSignUpViewModel.getInfoAccountGoogle(data);
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // đăng kí sự kiện lắng nghe sự kiện khi user thay đổi, đăng kí đăng nhập update
+        FirebaseAuth.getInstance().addAuthStateListener(this::onAuthStateChanged);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //hủy đăng kí sự kiện lắng nghe sự kiện khi user thay đổi, đăng kí đăng nhập update
+        FirebaseAuth.getInstance().removeAuthStateListener(this::onAuthStateChanged);
+    }
+
+    @Override
+    public void onAuthStateChanged( FirebaseAuth firebaseAuth) {
+        if(firebaseAuth.getCurrentUser() != null ){
+            startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+            finish();
         }
     }
 }
