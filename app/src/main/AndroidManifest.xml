@@ -13,6 +13,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
         <activity
+            android:name=".ui.page.addfriens.AddFriendsActivity"
+            android:screenOrientation="portrait">
+
+        </activity>
+        <activity
             android:name=".ui.page.home.HomeActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -20,7 +25,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.page.signin.SignInActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -23,9 +23,8 @@ public class Validations {
                         + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])){1}|"
                         + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$";
 
-        CharSequence inputStr = email;
         Pattern pattern = Pattern.compile(regExpn, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(inputStr);
+        Matcher matcher = pattern.matcher(email);
 
         if (!matcher.matches() || email.isEmpty())
             return "Email Malformed";
@@ -35,22 +34,13 @@ public class Validations {
 
     public static String isPasswordValid(String password) {
         String PASSWORD_PATTERN = "^[a-z0-9]{6,12}$";
-        CharSequence inputStr = password;
         Pattern pattern = Pattern.compile(PASSWORD_PATTERN, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(inputStr);
+        Matcher matcher = pattern.matcher(password);
 
         if (!matcher.matches() || password.isEmpty())
             return "Password Malformed";
         else
             return null;
-    }
-    public static boolean isValidPrice(String price){
-        try {
-           Integer.parseInt(price);
-           return false;
-        }catch (Exception e){
-            return true;
-        }
     }
 
     public static boolean isValidPhoneNumber(String number) {
@@ -63,10 +53,7 @@ public class Validations {
         String validNumber3 = "^[35789]{1}\\d{8}$";
         Pattern pattern3 = Pattern.compile(validNumber3, Pattern.CASE_INSENSITIVE);
         Matcher matcher3 = pattern3.matcher(number);
-        if (matcher.find() || matcher1.find() || matcher3.find()) {
-            return true;
-        }
-        return false;
+        return matcher.find() || matcher1.find() || matcher3.find();
     }
 
     public static String isValidName(String s) {
@@ -85,19 +72,13 @@ public class Validations {
     }
 
     public static boolean isValidSpecialCharacters(Editable s) {
-        Pattern regex = Pattern.compile("[$&+,:;=\\?@#|/'<>.^*()%!-]");//~`•√ππ÷×¶∆\}{°¢€£©®™✓
-        if (regex.matcher(s).find() ) {
-            return true;
-        }
-        return false;
+        Pattern regex = Pattern.compile("[$&+,:;=?@#|/'<>.^*()%!-]");//~`•√ππ÷×¶∆\}{°¢€£©®™✓
+        return regex.matcher(s).find();
     }
 
     public static boolean isValidAddress(String s) {
-        Pattern regex = Pattern.compile("[$&+:;=\\?@#|/'<>.^*()%!]");//~`•√ππ÷×¶∆\}{°¢€£©®™✓
-        if (regex.matcher(s).find() || s.isEmpty()) {
-            return true;
-        }
-        return false;
+        Pattern regex = Pattern.compile("[$&+:;=?@#|/'<>.^*()%!]");//~`•√ππ÷×¶∆\}{°¢€£©®™✓
+        return regex.matcher(s).find() || s.isEmpty();
     }
 
     public static String replaceMultiple(String baseString, String... replaceParts) {

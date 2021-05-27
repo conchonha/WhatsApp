@@ -8,103 +8,72 @@ import android.widget.Toast;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseUser;
 import com.whatsapp.whatsappexample.R;
+import com.whatsapp.whatsappexample.callback.CallbackSuccess;
 import com.whatsapp.whatsappexample.firebase.AuthFirebase;
 import com.whatsapp.whatsappexample.firebase.HandlingFirebaseDatabase;
 import com.whatsapp.whatsappexample.model.User;
 
-public class SignInViewModel extends AndroidViewModel {
-    private AuthFirebase mAuth;
-    private MutableLiveData<Boolean>mMutableLiveDataCheckLoading;
-    private String TAG = "SignInActivity-AAA: ";
-    private HandlingFirebaseDatabase mFirebaseDatabase;
+import java.util.Objects;
+
+public class SignInViewModel extends AndroidViewModel implements CallbackSuccess {
+    private final AuthFirebase mAuth;
+    private final MutableLiveData<Boolean>mMutableLiveDataCheckLoading;
+    private final String TAG = "SignInActivity-AAA: ";
+    private final HandlingFirebaseDatabase mFirebaseDatabase;
 
     public SignInViewModel( Application application) {
         super(application);
         mAuth = AuthFirebase.getInstance(application);
         mMutableLiveDataCheckLoading = new MutableLiveData<>();
-        mFirebaseDatabase = HandlingFirebaseDatabase.getInstance();
+        mFirebaseDatabase = HandlingFirebaseDatabase.getInstance(application);
     }
 
     public void signInEmailAndPassword(String email,String password){
         setMutableLiveDataCheckLoading(true);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                mAuth.signInEmailAndPassword(email, password, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete( Task<AuthResult> task) {
-                        setMutableLiveDataCheckLoading(false);
-                        if(task.isSuccessful()){
-                            Toast.makeText(getApplication(), getApplication().getString(R.string.lbl_signin_success), Toast.LENGTH_SHORT).show();
-                        }else{
-                            Toast.makeText(getApplication(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+        mAuth.signInEmailAndPassword(email, password, task ->{
+            if(task.isSuccessful()){
+                success();
+                return;
             }
-        }).start();
+            getError(Objects.requireNonNull(task.getException()).getMessage());
+        });
 
     }
 
     //get info account google from dialog account
     public void getInfoAccountGoogle(Intent data){
         setMutableLiveDataCheckLoading(true);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                mAuth.getInfoAccountGoogle(data, new OnCompleteListener<GoogleSignInAccount>() {
-                    @Override
-                    public void onComplete( Task<GoogleSignInAccount> task) {
-                        if(task.isSuccessful()){
-                            Log.d(TAG, "firebaseAuthWithGoogle:" + task.getResult().getId());
-                            signInAccountWithGoogle(task.getResult().getIdToken());
-                        }else {
-                            Log.d(TAG, "Google sign in failed" + task.getException().getMessage());
-                        }
-                    }
-                });
+        mAuth.getInfoAccountGoogle(data, task -> {
+            if(task.isSuccessful()){
+                signInAccountWithGoogle(Objects.requireNonNull(task.getResult()).getIdToken());
+                return;
             }
-        }).run();
+            getError(Objects.requireNonNull(task.getException()).getMessage());
+        });
     }
     //signIn with google firebase
     private void signInAccountWithGoogle(String idToken) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                mAuth.signInAccountWithGoogle(idToken, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete( Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            // Sign in success, update UI with the signed-in user's information
-                            Toast.makeText(getApplication(), getApplication().getString(R.string.lbl_signin_success), Toast.LENGTH_SHORT).show();
-                            FirebaseUser firebaseUser = task.getResult().getUser();
-                            User user = new User();
-                            user.setmUserName(firebaseUser.getDisplayName());
-                            user.setmMail(firebaseUser.getEmail());
-                            user.setmProfilePic(firebaseUser.getPhotoUrl().toString());
+        mAuth.signInAccountWithGoogle(idToken, task -> {
+            if(task.isSuccessful()){
+                // Sign in success, update UI with the signed-in user's information
+                Toast.makeText(getApplication(), getApplication().getString(R.string.lbl_signin_success), Toast.LENGTH_SHORT).show();
+                FirebaseUser firebaseUser = Objects.requireNonNull(task.getResult()).getUser();
+                if(firebaseUser != null){
+                    User user = new User();
+                    user.setmUserId(firebaseUser.getUid());
+                    user.setmUserName(firebaseUser.getDisplayName());
+                    user.setmMail(firebaseUser.getEmail());
+                    user.setmProfilePic( firebaseUser.getPhotoUrl().toString());
 
-                            mFirebaseDatabase.createUser(user,firebaseUser.getUid());
-                        }else{
-                            Toast.makeText(getApplication(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
-                        }
-                        setMutableLiveDataCheckLoading(false);
-                    }
-                });
+                    mFirebaseDatabase.createUser(user,firebaseUser.getUid(),SignInViewModel.this);
+                }
+                return;
             }
-        }).run();
-    }
-
-
-    public boolean checkUser(){
-       return mAuth.getCurrentUser() != null;
+            getError(Objects.requireNonNull(task.getException()).getMessage());
+        });
     }
 
     public GoogleSignInClient getInstanceGoogleSignInClient(){
@@ -117,5 +86,17 @@ public class SignInViewModel extends AndroidViewModel {
 
     public void setMutableLiveDataCheckLoading(Boolean bool) {
         this.mMutableLiveDataCheckLoading.setValue(bool);
+    }
+
+    @Override
+    public void success() {
+        setMutableLiveDataCheckLoading(false);
+    }
+
+    @Override
+    public void getError(String str) {
+        Toast.makeText(getApplication(), str, Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "getError: "+str);
+        setMutableLiveDataCheckLoading(false);
     }
 }

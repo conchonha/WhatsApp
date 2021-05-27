@@ -21,6 +21,7 @@ import com.whatsapp.whatsappexample.ui.page.signin.SignInActivity;
 public class HomeActivity extends BaseActivity {
     private ActivityHomeBinding mBinding;
     private HomeViewModel mHomeViewModel;
+
     @Override
     protected View getContentView() {
         mBinding = ActivityHomeBinding.inflate(getLayoutInflater());
@@ -30,13 +31,13 @@ public class HomeActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = new MenuInflater(HomeActivity.this);
-        menuInflater.inflate(R.menu.menu,menu);
+        menuInflater.inflate(R.menu.menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.settings:
                 Toast.makeText(this, "settings", Toast.LENGTH_SHORT).show();
                 break;
@@ -59,11 +60,22 @@ public class HomeActivity extends BaseActivity {
     protected void onInit() {
         mBinding.viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()));
         mBinding.tabLayout.setupWithViewPager(mBinding.viewPager);
+
+        setSupportActionBar(mBinding.toolbarHome);
     }
 
     @Override
     protected void onInitViewModel() {
         mHomeViewModel = new ViewModelProvider(this, MyApplication.factory).get(HomeViewModel.class);
 
+        mHomeViewModel.getMutableListAcceptUser().observe(this, list -> mBinding.txtCountAcceptFriend.setText(list.size() > 0 ? list.size() + "" : ""));
+
+        mHomeViewModel.getMutableCheckShowDialog().observe(this, aBoolean -> {
+            if (aBoolean) {
+                showProgressLoadding();
+            } else {
+                dismisProgressDialog();
+            }
+        });
     }
 }

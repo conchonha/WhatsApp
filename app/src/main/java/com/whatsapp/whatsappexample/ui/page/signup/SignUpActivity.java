@@ -4,7 +4,6 @@ package com.whatsapp.whatsappexample.ui.page.signup;
 import android.content.Intent;
 import android.view.View;
 
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,28 +29,25 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
     protected void onInitViewModel() {
         mSignUpViewModel = new ViewModelProvider(this, MyApplication.factory).get(SignUpViewModel.class);
 
-        mSignUpViewModel.getMutableLiveDataCheckLoading().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                if(aBoolean){
-                    showProgressLoadding();
-                }else{
-                    dismisProgressDialog();
-                }
+        mSignUpViewModel.getMutableLiveDataCheckLoading().observe(this, aBoolean -> {
+            if(aBoolean){
+                showProgressLoadding();
+            }else{
+                dismisProgressDialog();
             }
         });
     }
 
     @Override
     protected void onInit() {
-        getSupportActionBar().hide();
+
     }
 
     @Override
     protected void onListenerClicked() {
         mBinding.btnSignUp.setOnClickListener(this);
-        mBinding.mtxtAreadyAcount.setOnClickListener(this::onClick);
-        mBinding.btnGoogle.setOnClickListener(this::onClick);
+        mBinding.mtxtAreadyAcount.setOnClickListener(this);
+        mBinding.btnGoogle.setOnClickListener(this);
     }
 
     @Override
@@ -93,14 +89,14 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
     protected void onStart() {
         super.onStart();
         // đăng kí sự kiện lắng nghe sự kiện khi user thay đổi, đăng kí đăng nhập update
-        FirebaseAuth.getInstance().addAuthStateListener(this::onAuthStateChanged);
+        FirebaseAuth.getInstance().addAuthStateListener(this);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         //hủy đăng kí sự kiện lắng nghe sự kiện khi user thay đổi, đăng kí đăng nhập update
-        FirebaseAuth.getInstance().removeAuthStateListener(this::onAuthStateChanged);
+        FirebaseAuth.getInstance().removeAuthStateListener(this);
     }
 
     @Override

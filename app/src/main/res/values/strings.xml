@@ -16,4 +16,8 @@
     <string name="lbl_signup_success">User Created Successfully</string>
     <string name="lbl_signin_success">SignIn successfuly</string>
     <string name="lbl_sign_out">Signout successfully</string>
+    <string name="lbl_search">Search</string>
+    <string name="lbl_send_pending_friend_accept">Send pending friend success</string>
+    <string name="lbl_sign_faild">SignIn Faild</string>
+    <string name="lbl_google_signin_fail">Google signin faild</string>
 </resources>
