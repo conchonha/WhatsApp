@@ -1,7 +1,7 @@
 package com.whatsapp.whatsappexample.model;
 
 public class User {
-    private String mProfilePic,mUserName,mMail,mPassword,mUserId,mLastMessage;
+    private String mProfilePic,mUserName,mMail,mPassword,mUserId,mLastMessage,mKey;
     private Boolean mCheckTrueFalse = false;
 
     //Construcor defaul
@@ -79,5 +79,13 @@ public class User {
 
     public void setmCheckTrueFalse(Boolean mCheckTrueFalse) {
         this.mCheckTrueFalse = mCheckTrueFalse;
+    }
+
+    public String getmKey() {
+        return mKey;
+    }
+
+    public void setmKey(String mKey) {
+        this.mKey = mKey;
     }
 }

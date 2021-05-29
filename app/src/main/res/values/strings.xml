@@ -20,4 +20,5 @@
     <string name="lbl_send_pending_friend_accept">Send pending friend success</string>
     <string name="lbl_sign_faild">SignIn Faild</string>
     <string name="lbl_google_signin_fail">Google signin faild</string>
+    <string name="lbl_accept_friend">Accept Friend</string>
 </resources>

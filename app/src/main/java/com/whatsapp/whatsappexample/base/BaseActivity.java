@@ -25,7 +25,7 @@ import com.whatsapp.whatsappexample.R;
 public abstract class BaseActivity extends AppCompatActivity {
     private final int REQUEST_CODE = 100;
     private ProgressDialog mProgressDialog;
-    private static final String[] PEMISSITION_REQUESTION = {
+    private static final String[] PERMISSITION_REQUESTION = {
         "android.permission.WRITE_EXTERNAL_STORAGE",
         "android.permission.READ_EXTERNAL_STORAGE"
     };
@@ -45,7 +45,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     protected boolean isPermisitionGrant(){
-        for (String permisition : PEMISSITION_REQUESTION){
+        for (String permisition : PERMISSITION_REQUESTION){
             if(checkSelfPermission(permisition) != PackageManager.PERMISSION_GRANTED){
                 return false;
             }
@@ -54,7 +54,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected void requestPermisition(){
-        ActivityCompat.requestPermissions(this,PEMISSITION_REQUESTION,REQUEST_CODE);
+        ActivityCompat.requestPermissions(this, PERMISSITION_REQUESTION,REQUEST_CODE);
     }
 
     @CallSuper

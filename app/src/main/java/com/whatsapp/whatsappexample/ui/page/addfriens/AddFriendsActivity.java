@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Build;
 import android.text.Editable;
 import android.view.View;
-import android.widget.Toast;
 
 import com.whatsapp.whatsappexample.R;
 import com.whatsapp.whatsappexample.app.MyApplication;
@@ -65,7 +64,7 @@ public class AddFriendsActivity extends BaseActivity implements View.OnClickList
 
         });
 
-        mAddFriendsViewModel.getMutableLiveDataCheckLoading().observe(this, bool -> {
+        mAddFriendsViewModel.getCheckDialog().observe(this, bool -> {
             if (bool) {
                 showProgressLoadding();
             } else {
@@ -73,15 +72,12 @@ public class AddFriendsActivity extends BaseActivity implements View.OnClickList
             }
         });
 
-        mAddFriendsViewModel.getLiveErrorSendPendingFriend().observe(this, str -> {
-            showAlertDialog(str);
-            mAddFriendsViewModel.mMutableLiveDataCheckLoading.setValue(false);
-        });
+        mAddFriendsViewModel.getLiveErrorSendPendingFriend().observe(this, this::showAlertDialog);
 
         mAddFriendsViewModel.getLiveCountSendPendingFriend().observe(this, s -> {
             if (s >= mAdapterAddFriend.getListUserAccept().size()) {
-                mAddFriendsViewModel.mMutableLiveDataCheckLoading.setValue(false);
-                Toast.makeText(this, getString(R.string.lbl_send_pending_friend_accept), Toast.LENGTH_SHORT).show();
+                mAddFriendsViewModel.setDialog(false);
+                showToast(getString(R.string.lbl_send_pending_friend_accept));
             }
         });
     }

@@ -15,7 +15,7 @@ import com.whatsapp.whatsappexample.ui.page.home.HomeActivity;
 import com.whatsapp.whatsappexample.utils.Contains;
 import com.whatsapp.whatsappexample.utils.Validations;
 
-public class SignUpActivity extends BaseActivity implements View.OnClickListener ,FirebaseAuth.AuthStateListener{
+public class SignUpActivity extends BaseActivity implements View.OnClickListener, FirebaseAuth.AuthStateListener {
     private ActivitySignupBinding mBinding;
     private SignUpViewModel mSignUpViewModel;
 
@@ -29,10 +29,10 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
     protected void onInitViewModel() {
         mSignUpViewModel = new ViewModelProvider(this, MyApplication.factory).get(SignUpViewModel.class);
 
-        mSignUpViewModel.getMutableLiveDataCheckLoading().observe(this, aBoolean -> {
-            if(aBoolean){
+        mSignUpViewModel.getCheckDialog().observe(this, aBoolean -> {
+            if (aBoolean) {
                 showProgressLoadding();
-            }else{
+            } else {
                 dismisProgressDialog();
             }
         });
@@ -62,9 +62,8 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
                 mBinding.editTextEmail.setError(Validations.isEmailValid(email));
                 mBinding.editTextPassword.setError(Validations.isPasswordValid(password));
 
-                if(Validations.isValidName(name) == null && Validations.isEmailValid(email) == null && Validations.isPasswordValid(password) == null){
-                    mSignUpViewModel.createUser(name, email, password);
-                }
+                mSignUpViewModel.createUser(name, email, password);
+
                 break;
             case R.id.mtxtAreadyAcount:
                 finish();
@@ -78,9 +77,9 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode,Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == Contains.RC_SIGN_IN){
+        if (requestCode == Contains.RC_SIGN_IN) {
             mSignUpViewModel.getInfoAccountGoogle(data);
         }
     }
@@ -100,8 +99,8 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
     }
 
     @Override
-    public void onAuthStateChanged( FirebaseAuth firebaseAuth) {
-        if(firebaseAuth.getCurrentUser() != null ){
+    public void onAuthStateChanged(FirebaseAuth firebaseAuth) {
+        if (firebaseAuth.getCurrentUser() != null) {
             startActivity(new Intent(getApplicationContext(), HomeActivity.class));
             finish();
         }

@@ -41,7 +41,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
     protected void onInitViewModel() {
         mSignInViewModel = new ViewModelProvider(this, MyApplication.factory).get(SignInViewModel.class);
 
-        mSignInViewModel.getMutableLiveDataCheckLoading().observe(this, aBoolean -> {
+        mSignInViewModel.getCheckDialog().observe(this, aBoolean -> {
             if(aBoolean){
                 showProgressLoadding();
             }else {

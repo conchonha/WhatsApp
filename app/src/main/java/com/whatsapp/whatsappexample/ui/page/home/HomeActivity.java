@@ -16,6 +16,7 @@ import com.whatsapp.whatsappexample.app.MyApplication;
 import com.whatsapp.whatsappexample.base.BaseActivity;
 import com.whatsapp.whatsappexample.databinding.ActivityHomeBinding;
 import com.whatsapp.whatsappexample.ui.adapter.FragmentPagerAdapter;
+import com.whatsapp.whatsappexample.ui.page.accept_friends.AcceptFriendActivity;
 import com.whatsapp.whatsappexample.ui.page.signin.SignInActivity;
 
 public class HomeActivity extends BaseActivity {
@@ -53,7 +54,9 @@ public class HomeActivity extends BaseActivity {
 
     @Override
     protected void onListenerClicked() {
-
+        mBinding.icFriends.setOnClickListener(v->{
+            startActivity(new Intent(getApplicationContext(), AcceptFriendActivity.class));
+        });
     }
 
     @Override
@@ -68,9 +71,9 @@ public class HomeActivity extends BaseActivity {
     protected void onInitViewModel() {
         mHomeViewModel = new ViewModelProvider(this, MyApplication.factory).get(HomeViewModel.class);
 
-        mHomeViewModel.getMutableListAcceptUser().observe(this, list -> mBinding.txtCountAcceptFriend.setText(list.size() > 0 ? list.size() + "" : ""));
+        mHomeViewModel.countNumberAcceptFriend().observe(this, list -> mBinding.txtCountAcceptFriend.setText(list.size() > 0 ? list.size() + "" : ""));
 
-        mHomeViewModel.getMutableCheckShowDialog().observe(this, aBoolean -> {
+        mHomeViewModel.getCheckDialog().observe(this, aBoolean -> {
             if (aBoolean) {
                 showProgressLoadding();
             } else {

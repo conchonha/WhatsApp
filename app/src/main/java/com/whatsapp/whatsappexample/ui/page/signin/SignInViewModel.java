@@ -15,25 +15,20 @@ import com.whatsapp.whatsappexample.callback.CallbackSuccess;
 import com.whatsapp.whatsappexample.firebase.AuthFirebase;
 import com.whatsapp.whatsappexample.firebase.HandlingFirebaseDatabase;
 import com.whatsapp.whatsappexample.model.User;
+import com.whatsapp.whatsappexample.viewmodel.BaseViewModel;
 
 import java.util.Objects;
 
-public class SignInViewModel extends AndroidViewModel implements CallbackSuccess {
-    private final AuthFirebase mAuth;
-    private final MutableLiveData<Boolean>mMutableLiveDataCheckLoading;
+public class SignInViewModel extends BaseViewModel implements CallbackSuccess {
     private final String TAG = "SignInActivity-AAA: ";
-    private final HandlingFirebaseDatabase mFirebaseDatabase;
 
     public SignInViewModel( Application application) {
         super(application);
-        mAuth = AuthFirebase.getInstance(application);
-        mMutableLiveDataCheckLoading = new MutableLiveData<>();
-        mFirebaseDatabase = HandlingFirebaseDatabase.getInstance(application);
     }
 
     public void signInEmailAndPassword(String email,String password){
-        setMutableLiveDataCheckLoading(true);
-        mAuth.signInEmailAndPassword(email, password, task ->{
+        setDialog(true);
+        mFirebaseAuth.signInEmailAndPassword(email, password, task ->{
             if(task.isSuccessful()){
                 success();
                 return;
@@ -45,8 +40,8 @@ public class SignInViewModel extends AndroidViewModel implements CallbackSuccess
 
     //get info account google from dialog account
     public void getInfoAccountGoogle(Intent data){
-        setMutableLiveDataCheckLoading(true);
-        mAuth.getInfoAccountGoogle(data, task -> {
+        setDialog(true);
+        mFirebaseAuth.getInfoAccountGoogle(data, task -> {
             if(task.isSuccessful()){
                 signInAccountWithGoogle(Objects.requireNonNull(task.getResult()).getIdToken());
                 return;
@@ -56,10 +51,10 @@ public class SignInViewModel extends AndroidViewModel implements CallbackSuccess
     }
     //signIn with google firebase
     private void signInAccountWithGoogle(String idToken) {
-        mAuth.signInAccountWithGoogle(idToken, task -> {
+        mFirebaseAuth.signInAccountWithGoogle(idToken, task -> {
             if(task.isSuccessful()){
                 // Sign in success, update UI with the signed-in user's information
-                Toast.makeText(getApplication(), getApplication().getString(R.string.lbl_signin_success), Toast.LENGTH_SHORT).show();
+                showToast(getApplication().getString(R.string.lbl_signin_success));
                 FirebaseUser firebaseUser = Objects.requireNonNull(task.getResult()).getUser();
                 if(firebaseUser != null){
                     User user = new User();
@@ -68,7 +63,7 @@ public class SignInViewModel extends AndroidViewModel implements CallbackSuccess
                     user.setmMail(firebaseUser.getEmail());
                     user.setmProfilePic( firebaseUser.getPhotoUrl().toString());
 
-                    mFirebaseDatabase.createUser(user,firebaseUser.getUid(),SignInViewModel.this);
+                    mFireBaseDatabase.createUser(user,firebaseUser.getUid(),SignInViewModel.this);
                 }
                 return;
             }
@@ -77,26 +72,7 @@ public class SignInViewModel extends AndroidViewModel implements CallbackSuccess
     }
 
     public GoogleSignInClient getInstanceGoogleSignInClient(){
-        return mAuth.getInstanceGoogleSignInClient();
+        return mFirebaseAuth.getInstanceGoogleSignInClient();
     }
 
-    public MutableLiveData<Boolean> getMutableLiveDataCheckLoading() {
-        return mMutableLiveDataCheckLoading;
-    }
-
-    public void setMutableLiveDataCheckLoading(Boolean bool) {
-        this.mMutableLiveDataCheckLoading.setValue(bool);
-    }
-
-    @Override
-    public void success() {
-        setMutableLiveDataCheckLoading(false);
-    }
-
-    @Override
-    public void getError(String str) {
-        Toast.makeText(getApplication(), str, Toast.LENGTH_SHORT).show();
-        Log.d(TAG, "getError: "+str);
-        setMutableLiveDataCheckLoading(false);
-    }
 }

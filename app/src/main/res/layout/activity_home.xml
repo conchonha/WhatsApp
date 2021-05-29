@@ -42,6 +42,8 @@
         android:layout_width="18dp"
         android:layout_height="18dp"
         android:id="@+id/icFriends"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackground"
         android:layout_marginRight="50dp"
         android:src="@drawable/ic_user_friends"
         app:layout_constraintRight_toRightOf="parent"

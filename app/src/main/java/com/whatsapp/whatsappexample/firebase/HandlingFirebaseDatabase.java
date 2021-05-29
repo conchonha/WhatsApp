@@ -3,6 +3,7 @@ package com.whatsapp.whatsappexample.firebase;
 import android.content.Context;
 import android.os.Build;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -151,6 +152,7 @@ public class HandlingFirebaseDatabase {
                 List<User>list = new ArrayList<>();
                 for (DataSnapshot snapshot1 : snapshot.getChildren()){
                     User user = snapshot1.getValue(User.class);
+                    user.setmKey(snapshot1.getKey());
                     list.add(user);
                 }
                 callbackGetListUser.getListUser(list);
@@ -159,6 +161,22 @@ public class HandlingFirebaseDatabase {
             @Override
             public void onCancelled( DatabaseError error) {
                 callbackGetListUser.getError(error.getMessage());
+            }
+        });
+    }
+
+    public void onRemovePendingFriends(String key,CallbackSuccess callbackSuccess){
+        mMyRef.getRef().child(Contains.childFriend).
+                child(Contains.childKeyPending).
+                child(mFirebaseAuth.getCurrentUser().getUid()).
+                child(key).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    callbackSuccess.success();
+                    return;
+                }
+                callbackSuccess.getError(task.getException().getMessage());
             }
         });
     }
