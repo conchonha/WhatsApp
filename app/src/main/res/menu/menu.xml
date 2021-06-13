@@ -3,6 +3,8 @@
     <item
         android:id="@+id/settings"
         android:title="Settings" />
+    <item android:id="@+id/groupChats"
+        android:title="GroupChat"/>
     <item
         android:id="@+id/logout"
         android:title="Logout" />

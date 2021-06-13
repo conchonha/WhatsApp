@@ -58,12 +58,11 @@ public class AcceptFriendActivity extends BaseActivity implements OnclickAdapter
 
     @Override
     public void onAccept(User user, int Position) {
-
+        mAcceptFriendViewModel.onAcceptPendingFriends(user);
     }
 
     @Override
     public void onRemove(User user, int Position) {
         mAcceptFriendViewModel.onRemovePendingFriends(user.getmKey());
-        Log.d("BBB", "onRemove: "+user.getmKey());
     }
 }

@@ -12,10 +12,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
-        <activity android:name=".ui.page.accept_friends.AcceptFriendActivity"></activity>
+        <activity android:name=".ui.page.chat_detail.ChatDetailActivity"></activity>
+        <activity android:name=".ui.page.accept_friends.AcceptFriendActivity" />
         <activity
             android:name=".ui.page.addfriens.AddFriendsActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.page.home.HomeActivity"
             android:screenOrientation="portrait" />

@@ -1,6 +1,7 @@
 package com.whatsapp.whatsappexample.viewmodel;
 
 import android.app.Application;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -60,6 +61,7 @@ public class BaseViewModel extends AndroidViewModel implements CallbackSuccess {
     public void getError(String str) {
         setDialog((false));
         showToast(str);
+        Log.d("AAA", "getError: "+str);
     }
 
     public void showToast(String str){

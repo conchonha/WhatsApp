@@ -2,8 +2,6 @@ package com.whatsapp.whatsappexample.ui.page.addfriens;
 
 import android.app.Application;
 import android.os.Build;
-import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.lifecycle.LiveData;
@@ -67,7 +65,7 @@ public class AddFriendsViewModel extends BaseViewModel implements CallbackGetLis
 
     public LiveData<List<User>> getListUserNoFriend() {
         setDialog(true);
-        mFireBaseDatabase.getListFriends(this);
+        mFireBaseDatabase.getListUserNoFriend(this);
         return mListUser;
     }
 
@@ -85,12 +83,5 @@ public class AddFriendsViewModel extends BaseViewModel implements CallbackGetLis
     public void getListUser(List<User> listUser) {
         mListUser.setValue(listUser);
        setDialog(false);
-    }
-
-    @Override
-    public void getError(String str) {
-        Toast.makeText(getApplication(), str, Toast.LENGTH_SHORT).show();
-        Log.d(TAG, "getError: "+str);
-        setDialog(false);
     }
 }

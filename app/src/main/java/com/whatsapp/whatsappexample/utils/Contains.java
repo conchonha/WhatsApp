@@ -6,4 +6,6 @@ public class Contains {
     public final static String childFriend = "Friends";
     public final static String childAccept = "Accept";
     public final static String childKeyPending = "Pending";
+    public final static String keyUser = "keyUser";
+    public final static String childChats = "Chats";
 }

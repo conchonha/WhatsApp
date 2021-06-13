@@ -1,6 +1,8 @@
 package com.whatsapp.whatsappexample.model;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
     private String mProfilePic,mUserName,mMail,mPassword,mUserId,mLastMessage,mKey;
     private Boolean mCheckTrueFalse = false;
 
